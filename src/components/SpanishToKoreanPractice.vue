@@ -48,7 +48,7 @@
         </div>
       </div>
 
-      <div class="key-group">
+      <div class="key-group" style="margin-top:1rem">
         <h4>Posiciones</h4>
         <div class="button-grid">
           <button 
@@ -122,6 +122,7 @@ export default {
     checkAnswer() {
       if (!this.userSelection) {
         this.feedback = " Por favor, ingresa tu respuesta antes de corregir.";
+        this.isCorrect = false;
         return;
       }
       

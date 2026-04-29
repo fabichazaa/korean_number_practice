@@ -14,13 +14,8 @@
 
     <div class="answer-section">
       <div class="input-display">
-        <input 
-          type="number" 
-          v-model.number="userNumber" 
-          placeholder="Escribí el número aquí..."
-          @keyup.enter="checkAnswer"
-          ref="numberInput"
-        />
+        <span v-if="userNumber !== null">{{ userNumber }}</span>
+        <span v-else class="placeholder">Usa los botones de abajo...</span>
       </div>
       
       <div class="controls">
@@ -34,6 +29,29 @@
         {{ feedback }}
       </p>
     </transition>
+
+    <div class="phone-keypad">
+      <div class="keypad-row">
+        <button @click="addNumber(1)" class="neutral-button">1</button>
+        <button @click="addNumber(2)" class="neutral-button">2</button>
+        <button @click="addNumber(3)" class="neutral-button">3</button>
+      </div>
+      <div class="keypad-row">
+        <button @click="addNumber(4)" class="neutral-button">4</button>
+        <button @click="addNumber(5)" class="neutral-button">5</button>
+        <button @click="addNumber(6)" class="neutral-button">6</button>
+      </div>
+      <div class="keypad-row">
+        <button @click="addNumber(7)" class="neutral-button">7</button>
+        <button @click="addNumber(8)" class="neutral-button">8</button>
+        <button @click="addNumber(9)" class="neutral-button">9</button>
+      </div>
+      <div class="keypad-row">
+        <button @click="clearInput" class="neutral-button btn-clear">C</button>
+        <button @click="addNumber(0)" class="neutral-button">0</button>
+        <button @click="deleteLast" class="neutral-button btn-clear">⌫</button>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -89,6 +107,7 @@ export default {
     checkAnswer() {
       if (this.userNumber === null) {
         this.feedback = "Por favor, ingresa un número.";
+        this.isCorrect = false;
         return;
       }
 
@@ -108,6 +127,32 @@ export default {
     },
     switchMode() {
       this.$emit('switch-mode');
+    },
+    clearInput() {
+      this.userNumber = null;
+      this.feedback = '';
+    },
+    addNumber(num) {
+      if (this.userNumber === null) {
+        this.userNumber = num;
+      } else {
+        // Limitar a 3 dígitos máximo
+        if (this.userNumber.toString().length < 3) {
+          this.userNumber = this.userNumber * 10 + num;
+        }
+      }
+      this.feedback = '';
+    },
+    deleteLast() {
+      if (this.userNumber !== null) {
+        const str = this.userNumber.toString();
+        if (str.length === 1) {
+          this.userNumber = null;
+        } else {
+          this.userNumber = parseInt(str.slice(0, -1));
+        }
+      }
+      this.feedback = '';
     }
   }
 };
@@ -117,6 +162,12 @@ export default {
 /* Component-specific styles only */
 .target-hangul {
   color: #35495e;
+}
+
+.placeholder {
+  color: #adb5bd;
+  font-size: 1rem;
+  font-weight: normal;
 }
 
 .btn-clear { 
@@ -136,5 +187,39 @@ h4 {
   text-transform: uppercase;
   font-size: 0.8rem;
   letter-spacing: 1px;
+}
+
+.phone-keypad {
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 280px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.keypad-row {
+  display: flex;
+  justify-content: center;
+  gap: 10px;
+}
+
+.keypad-row .neutral-button {
+  width: 70px;
+  height: 60px;
+  font-size: 1.3rem;
+  font-weight: 600;
+  border-radius: 8px;
+}
+
+.btn-clear {
+  background: #f8d7da !important;
+  color: #721c24 !important;
+  border-color: #f5c6cb !important;
+}
+
+.btn-clear:hover {
+  background: #f5c6cb !important;
 }
 </style>

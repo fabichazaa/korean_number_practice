@@ -6,20 +6,14 @@
   flex-direction: column;
 }
 
-a,
-.green {
-  text-decoration: none;
-  color: hsla(160, 100%, 37%, 1);
-  transition: 0.4s;
-  padding: 3px;
-}
-
+/* --- Keep your original Button logic --- */
 [class$="-button"] {
   padding: 10px 15px;
   border: none;
   border-radius: 8px;
   cursor: pointer;
   font-weight: 600;
+  transition: all 0.2s; /* Smooth hover for all */
 }
 
 .neutral-button {
@@ -28,9 +22,7 @@ a,
   background: white;
   font-weight: normal;
   border: 1px solid #dee2e6;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: all 0.2s;
+  color: #35495e;
 }
 
 .neutral-button:hover {
@@ -56,13 +48,22 @@ a,
   background: #5a6268;
 }
 
+.secondary-button {
+  background: #35495e;
+  color: white;
+}
+
+.secondary-button:hover {
+  background: #2c3e50;
+}
+
+/* --- Keep Icon Button Styles --- */
 .icon-button {
   padding: 8px;
   background: transparent;
   border: 1px solid #dee2e6;
   border-radius: 8px;
   cursor: pointer;
-  transition: all 0.2s;
 }
 
 .icon-button:hover {
@@ -76,36 +77,27 @@ a,
   display: block;
 }
 
-.secondary-button {
-  background: #35495e;
-  color: white;
-}
+/* --- THE RESPONSIVE FIXES --- */
 
-.secondary-button:hover {
-  background: #2c3e50;
-}
-
-/* Shared quiz component styles */
 .korean-quiz {
-  width: 600px;
-  margin: 40px auto;
-  padding: 30px;
+  width: 95%;        /* Flexible on mobile */
+  max-width: 600px;  /* Solid on Desktop */
+  margin: 20px auto;
+  padding: clamp(15px, 5vw, 30px); /* Padding grows with screen */
   background: #ffffff;
   border-radius: 16px;
   box-shadow: 0 10px 25px rgba(0,0,0,0.1);
   text-align: center;
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  box-sizing: border-box; 
 }
 
 .target-number,
 .target-hangul {
-  font-size: 3.5rem;
+  /* This ensures the big text shrinks so it doesn't leave the box */
+  font-size: clamp(2.5rem, 12vw, 5rem);
   font-weight: 800;
   line-height: 1.2;
   margin: 20px 0;
-}
-
-.target-number {
   color: #35495e;
 }
 
@@ -114,103 +106,68 @@ a,
   gap: 8px;
   justify-content: center;
   margin-bottom: 20px;
+  flex-wrap: wrap; /* This allows buttons to stack on small phones */
 }
 
-.feedback {
-  margin-top: 15px;
-  font-size: 1.1rem;
-  font-weight: bold;
-}
-
-.success { color: #2ecc71; }
-.error { color: #e74c3c; }
-
-.divider {
-  height: 1px;
-  background: #eee;
-  margin: 30px 0;
-}
-
-.stats-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.streak-badge {
-  color: #6c757d;
-  font-size: 0.9rem;
-}
-
-.streak-badge strong {
-  color: #42b883;
-  font-size: 1.1rem;
-}
-
-.card-header {
-  display: flex;
-  column-gap: 15px;
-  justify-content: center;
-  align-items: center;
-  margin-bottom: 20px;
+.controls button {
+  flex: 1 1 auto; /* Buttons fill the width equally */
 }
 
 /* Shared input display styles */
 .input-display {
-  min-height: 60px;
+  height: 60px;
   background: #f8f9fa;
   border: 2px solid #e9ecef;
   border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 2rem;
+  font-size: clamp(1.5rem, 6vw, 2.5rem);
   font-weight: bold;
   color: #42b883;
   margin-bottom: 20px;
+  padding: 0 10px;
 }
 
-.input-display input {
-  border: none;
-  background: transparent;
-  font-size: 2rem;
-  font-weight: bold;
-  color: #42b883;
-  text-align: center;
-  width: 100%;
-  outline: none;
-  line-height: 1;
+.card-header{
+  display: flex;
+  flex-direction: row;
+  column-gap: 15px;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 
-.input-display input::placeholder {
-  color: #adb5bd;
-  font-size: 1rem;
-  font-weight: normal;
-  line-height: 1;
-}
-
-/* Hide number input arrows */
-.input-display input[type="number"]::-webkit-outer-spin-button,
-.input-display input[type="number"]::-webkit-inner-spin-button {
-  -webkit-appearance: none;
-  margin: 0;
-}
-
-.input-display input[type="number"] {
-  -moz-appearance: textfield;
-}
-
-@media (hover: hover) {
-  a:hover {
-    background-color: hsla(160, 100%, 37%, 0.2);
+/* --- Mobile Specific Tweaks --- */
+@media (max-width: 480px) {
+  .neutral-button {
+    padding: 12px 5px; /* Slightly smaller keypad buttons for narrow screens */
+    font-size: 1rem;
+  }
+  
+  .card-header h1 {
+    font-size: 1.2rem;
+    font-weight: bolder;
   }
 }
 
-@media (min-width: 1024px) {
-  body {
-    display: flex;
-    place-items: center;
-  }
+/* Feedback styles */
+.feedback {
+  margin: 15px 0;
+  padding: 12px 20px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
 
+.feedback.success {
+  background: #d4edda;
+  color: #155724;
+  border: 1px solid #c3e6cb;
+}
 
+.feedback.error {
+  background: #f8d7da;
+  color: #721c24;
+  border: 1px solid #f5c6cb;
 }
